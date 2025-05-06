@@ -35,11 +35,25 @@ namespace UserServiceAPI.Controllers
             }
 
             [HttpPost]
-            public async Task<IActionResult> CreateUser([FromBody] AppUser user)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] AppUserRequest userRequest)
+        {
+            var user = new AppUser
             {
-                await _userService.AddUserAsync(user);
-                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
-            }
+                id = Guid.NewGuid().ToString(),
+                Username = userRequest.Username,
+                Email = userRequest.Email,
+                Role = userRequest.Role
+            };
+
+            await _userService.AddUserAsync(user);
+
+            return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
+
+
+
+
         }
+    }
 
     }
